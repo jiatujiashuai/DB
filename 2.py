@@ -13,13 +13,33 @@ def create_connection():
 
 def lookup_database(conn, column, data):
     cur = conn.cursor()
+    cur1 = conn.cursor()
+    query1 = "SELECT * FROM Agenda"
+    cur1.execute(query1)
+    records = cur1.fetchall()
     #query = "SELECT * FROM Agenda WHERE %s=%s" %(column, data)
-    query = "SELECT * FROM Agenda WHERE %s=?" %column
-    cur.execute(query,(data,))
-    print(data)
-    #cur.execute(query)
+    #print(column)
+    if column == "Speakers":
+        query = "SELECT * FROM Agenda WHERE %s LIKE ?" %column
+        data = '%'+data+'%'
+        cur.execute(query, (data,))
+    else:
+        query = "SELECT * FROM Agenda WHERE %s=?" %column
+        cur.execute(query,(data,))
+        #print(data)
+        #cur.execute(query)
     for row in cur:
         print(row)
+        if row[4] == "Session":
+            idx = row[0]
+            print(idx)
+            for r in records[idx:]:
+                if r[4] == "Sub":
+                    print(r)
+                else:
+                    break
+
+
 
 
 if __name__ == "__main__":
@@ -31,7 +51,7 @@ if __name__ == "__main__":
             data_name += ' '
         #data_name = argv[2]
         data_name = data_name[0:-1]
-        print(data_name)
+        #print(data_name)
         if column_name in ['Date', 'Time_Start', 'Time_End', 'Session', 'Session_Title', 'Room_Location', 'Description', 'Speakers']:
             lookup_database(create_connection(), column_name, data_name)
         else:
