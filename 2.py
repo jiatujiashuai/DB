@@ -32,15 +32,12 @@ def lookup_database(conn, column, data):
         print(row)
         if row[4] == "Session":
             idx = row[0]
-            print(idx)
+            #print(idx)
             for r in records[idx:]:
                 if r[4] == "Sub":
                     print(r)
                 else:
                     break
-
-
-
 
 if __name__ == "__main__":
     try:
